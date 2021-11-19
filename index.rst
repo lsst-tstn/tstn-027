@@ -54,26 +54,34 @@
 .. Do not include the document title (it's automatically added from metadata.yaml).
 
 .. _AuxTel Temperatures and Pressures: https://chronograf-summit-efd.lsst.codes:30828/sources/1/dashboards/14?refresh=Paused&lower=now%28%29%20-%2024h
-.. _Auxtel Daily-Checkout Notebook: https://github.com/lsst-ts/ts_notebooks/blob/develop/procedures/auxtel/observation_procedures/DayTime-Checkout.ipynb>
-
-.. _Master CSC Table: https://ts-xml.lsst.io/#master-csc-table.
+.. _Auxtel Daily-Checkout Notebook: https://github.com/lsst-ts/ts_notebooks/blob/develop/procedures/auxtel/observation_procedures/DayTime-Checkout.ipynb
 
 .. _Intro:
 
 Introduction
 ============
 
-Seismic events occur regularily in Chile and depending upon the timing and severity of the event a different response may be required.
+Seismic events occur regularily in Chile.
+Depending upon the timing and severity of the event, a different response may be required.
 The AuxTel system is designed to survive a seismic events up to 0.4g of acceleration, which is a major (and rare) event.
-As of the time of writing this document, there is no accellerometer system installed on the summit that actively monitors and measures the acceleration from seismic events.
-The use of a the magnitude system is indicative of severity but numerous factors regarding the event (e.g. location, depth, time of shaking) directly affects the accelerations received on the summit.
+As of the time of writing, there is no accellerometer system installed on the summit that actively monitors and measures the acceleration from seismic events.
+It is possible to obtain the magnitude and approximate location of an earthquake via alert streams on the internet post-facto, but this is not sufficient.
+The magnitude system is indicative of severity but numerous factors regarding the event (e.g. location, depth, time of shaking) directly affects the accelerations received on the summit and the amount of potential damage and therefore cannot be used as the only indicator.
 
 This document breaks down the procedures according to a qualitative on-site assessment of the severity.
 The procedure should be followed starting from the greatest severity experienced, then following the sections written for less severe events until the system is fully recovered.
 
 .. Important::
-   In then event of ANY seismic event, operators should press the STOP button in LOVE.
+   In then event of ANY seismic event, operators should press the *TCS-Stop-All* button shown in :numref:`fig-ats-stop-all`.
    This will gracefully stop all observatory motion
+
+.. _fig_stop_all:
+
+.. figure:: /_static/ATS-Stop-all.png
+   :name: fig-ats-stop-all
+
+   The button located in LOVE to rapidly stop all telescope and dome motion. 
+   This button should be readily available and pressued by observers when experiencing and earthquake.
 
 Upon installation of the GIS, the E-stop will also be activated after several seconds, once the motion has ceased from the controlled stop above.
 
@@ -96,7 +104,8 @@ If the network goes down OR the power is out
 
 #. Do *not* attempt to move the telescope or dome azimuth.
 #. Check the LATISS refrigeration system for leaks. 
-   Normally, this will be a foul odour caused by an odorant in the flammable gas (mostly propane). 
+   Warning, this gas is flammable (similar to propane).
+   It will also have a strong odor (intentional safety feature).
    The leak will most likely occur near the white networking cabinet or close to the instrument.
    One can also check the gauge on the compressor located at the bottom of the white networking cabinet.
 
@@ -106,7 +115,7 @@ If the network goes down OR the power is out
 
      * If possible, disconnect the lines from the compressor AND from the rear of LATISS. 
        This requires the spanners designed for this task and should only be done by trained personnel.
-       Any leak must also be small.
+       This will minimize the amount of released gas and help minimize damage to the refrigeration system.
   
 #. Check copper air piping for leaks. An air leak will be noticed by sound (hissing), or by watching the pressure gauge on the air compressor. If a leak is found, turn off the compressor.
 
@@ -115,8 +124,8 @@ If the network goes down OR the power is out
    This can be performed by closing the valve at the compressor then disconnecting an air line.
 
 #. If all power is off or the Polycold compressor is turned off due to a leak or damage, an uncontrolled warm-up of the instrument will begin to occur.
-   If no leak has been found, or the gas has been vented, then get the turbo pump and get it ready to connect to the instrument.
-   The internal cold trap should prevent damage, but if the turbopump can be connected within 4 hours it will greatly reduce the risk of damage.
+   If no leak has been found, or the gas has been vented, then get the turbo pump and connect it to the instrument.
+   The internal cold trap should prevent damage, but if the turbo pump can be connected within 4 hours it will greatly reduce the risk of damage.
 
 #. Check the vacuum of the dewar by looking at the number of lights illuminated on the ion pump. 
    If a warm-up is occuring, then turn off the ion pump using the toggle switch found on the silver box connected to the LATISS frame.
@@ -169,7 +178,7 @@ If the network stays up
 
    * If the pressure is decreasing rapidly then there is a leak in the system.
      This will result in the instrument warming up.
-     Warning, this gas is flammable.
+     Warning, this gas is flammable (similar to propane).
      It will also have a strong odor (intentional safety feature).
      Power off everything in the cabinet immediately via the UPS.
 
@@ -201,7 +210,7 @@ If the network stays up
 
        * Open the control loops::
 
-          await atcs.rem.ataos.cmd_disableCorrection.set_start(m1=True, hexapod=True, atspectrograph=with_latiss)
+          await atcs.rem.ataos.cmd_disableCorrection.set_start(m1=True, hexapod=True, atspectrograph=True)
 
        * Set the M1 pressure to zero to lower the mirror::
 
@@ -241,6 +250,7 @@ Night time observations would be ceased temporarily but are expected to resume.
 Power and networking is not disrupted.
 
 #. Verify the vacuum and temperatures of LATISS are nominal via the `AuxTel Temperatures and Pressures`_ Chronograf Dashboard.
+
    * If a leak occurred, consider this a `Severe_Earthquake`_.
 
 #. Perform a visual inspection of the building using the cameras in the building.
@@ -290,43 +300,43 @@ Power and networking is not disrupted.
    * 
      .. code-block:: python
 
-         await atcs.rem.ataos.cmd_enableCorrection.set_start(m1=True, hexapod=True, atspectrograph=with_latiss)
+         await atcs.rem.ataos.cmd_enableCorrection.set_start(m1=True, hexapod=True, atspectrograph=True)
 
    * Track in place for ~1 minute, and ensure no errors occur.
 
      .. code-block:: python
 
-         mountPositions=await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
+         mountPositions = await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
          await atcs.point_azel(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle, rot_tel=mountPositions.nasmythCalculatedAngle)
 
    * Track sidereal motion for 1 minute and ensure no errors occur
 
      .. code-block:: python
 
-         mountPositions=await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
-         coord=atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle)
-        await atcs.slew_icrs(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle, rot=mountPositions.skyAngle, stop_before_slew=False)
+         mountPositions = await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
+         coord = atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle)
+         await atcs.slew_icrs(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle, rot=mountPositions.skyAngle, stop_before_slew=False)
 
    * Perform a 1 degree slew, then a 5 degree slew, then a 10 degree slew and ensure no errors occur
 
      .. code-block:: python
 
         # 1 degree slew, watch out for limits and adjust offset signs appropriately
-        az_offset=1; el_offset=1
-        mountPositions=await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
-        coord=atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
+        az_offset = 1; el_offset = 1
+        mountPositions = await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
+        coord = atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
         await atcs.slew_icrs(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle, rot=mountPositions.skyAngle, stop_before_slew=False)
 
         # 5 degree slew, watch out for limits and adjust offset signs appropriately
-        az_offset=5; el_offset=5
-        mountPositions=await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
-        coord=atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
+        az_offset = 5; el_offset = 5
+        mountPositions = await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
+        coord = atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
         await atcs.slew_icrs(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle, rot=mountPositions.skyAngle, stop_before_slew=False)
 
         # 10 degree slew, watch out for limits and adjust offset signs appropriately
-        az_offset=10; el_offset=10
-        mountPositions=await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
-        coord=atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
+        az_offset = 10; el_offset = 10
+        mountPositions = await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
+        coord = atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
         await atcs.slew_icrs(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle, rot=mountPositions.skyAngle, stop_before_slew=False)
 
    * Stop tracking.
@@ -349,7 +359,7 @@ Power and networking is not disrupted.
 
          dome_az = await atcs.rem.atdome.tel_position.next(flush=True,timeout=10)
          print(f'Dome currently thinks it is at an azimuth position of {dome_az.azimuthPosition}.\n Note the dome may not be properly homed at this time')
-         d_az=4
+         d_az = 4
          await atcs.rem.atdome.cmd_moveAzimuth.set_start(azimuth=dome_az.azimuthPosition+d_az)
   
 
@@ -358,7 +368,7 @@ Power and networking is not disrupted.
      .. code-block:: python
 
          dome_az = await atcs.rem.atdome.tel_position.next(flush=True,timeout=10)
-         d_az=10
+         d_az = 10
          await atcs.rem.atdome.cmd_moveAzimuth.set_start(azimuth=dome_az.azimuthPosition+d_az)
 
    * Repeat for a 90 degree move in the opposite direction
@@ -366,7 +376,7 @@ Power and networking is not disrupted.
       .. code-block:: python
 
          dome_az = await atcs.rem.atdome.tel_position.next(flush=True,timeout=10)
-         d_az=-90
+         d_az = -90
          await atcs.rem.atdome.cmd_moveAzimuth.set_start(azimuth=dome_az.azimuthPosition+d_az)
 
    * Home the dome
@@ -387,9 +397,9 @@ Power and networking is not disrupted.
      .. code-block:: python
 
         # 5 degree slew, watch out for limits and adjust offset signs appropriately
-        az_offset=5; el_offset=5
-        mountPositions=await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
-        coord=atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
+        az_offset = 5; el_offset = 5
+        mountPositions = await atcs.rem.atptg.tel_mountPositions.aget(timeout=5)
+        coord = atcs.radec_from_azel(az=mountPositions.azimuthCalculatedAngle+az_offset, el=mountPositions.elevationCalculatedAngle+el_offset)
         await atcs.slew_icrs(az=mountPositions.azimuthCalculatedAngle, el=mountPositions.elevationCalculatedAngle, rot=mountPositions.skyAngle, stop_before_slew=False)
 
 
@@ -416,6 +426,7 @@ Network and power are expected to be uninterrupted.
    * If faults occur, see the procedure for `Moderate_Earthquake`_.
 
 #. Verify the vacuum and temperatures of LATISS are nominal via the `AuxTel Temperatures and Pressures`_ Chronograf Dashboard.
+
    * If a leak occurred, consider this a `Severe_Earthquake`_.
 
 #. Track in place for ~1 minute, and ensure no errors occur.
