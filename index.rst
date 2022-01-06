@@ -56,7 +56,6 @@
 .. _AuxTel Temperatures and Pressures: https://chronograf-summit-efd.lsst.codes:30828/sources/1/dashboards/14?refresh=Paused&lower=now%28%29%20-%2024h
 .. _Auxtel Daily-Checkout Notebook: https://github.com/lsst-ts/ts_notebooks/blob/develop/procedures/auxtel/observation_procedures/DayTime-Checkout.ipynb
 
-.. _Intro:
 
 Introduction
 ============
@@ -73,7 +72,7 @@ The procedure should be followed starting from the greatest severity experienced
 
 .. Important::
    In then event of ANY seismic event, operators should press the *TCS-Stop-All* button shown in :numref:`fig-ats-stop-all`.
-   This will gracefully stop all observatory motion
+   This will gracefully stop all observatory motion.
 
 .. _fig_stop_all:
 
@@ -81,9 +80,11 @@ The procedure should be followed starting from the greatest severity experienced
    :name: fig-ats-stop-all
 
    The button located in LOVE to rapidly stop all telescope and dome motion. 
-   This button should be readily available and pressued by observers when experiencing and earthquake.
+   This button should be readily available and pressed by observers when experiencing and earthquake and will gracefully stop all motion.
 
 Upon installation of the GIS, the E-stop will also be activated after several seconds, once the motion has ceased from the controlled stop above.
+When the E-stop is activated, the brakes will engage and CSCs will go into fault state.
+Recovery will require disengaging the E-stop using the `E-stop Reset Procedure <https://tstn-004.lsst.io/#e-stop-reset-procedure>`_. 
 
 .. Note::
    For the code snippets found in this procedure, it is assumed you are running out of the `Auxtel Daily-Checkout Notebook`_ and have run the cells to instantiate the control classes.
@@ -94,6 +95,7 @@ Severe Earthquake
 =================
 
 This is a major (and rare) event.
+Operators should press the *TCS-Stop-All* button shown in :numref:`fig-ats-stop-all` to gracefully stop all observatory motion.
 For this level of earthquake (>0.2g) standing up and/or walking would be impossible. 
 Moderate damage to equipment is expected.
 Night time observations would be ceased and efforts would go into damage control and assessment.
@@ -244,6 +246,7 @@ Moderate Earthquake
 ===================
 
 This is relatively common occurance (several times per year).
+Operators should press the *TCS-Stop-All* button shown in :numref:`fig-ats-stop-all` to gracefully stop all observatory motion.
 For this level of earthquake (<0.1g) standing up and/or walking would be possible. 
 Damage to equipment is possible but not expected.
 Night time observations would be ceased temporarily but are expected to resume.
@@ -411,6 +414,7 @@ Minor Earthquake
 ================
 
 These events happen regularily and are not expected to cause equipment damage.
+Operators should press the *TCS-Stop-All* button shown in :numref:`fig-ats-stop-all` to gracefully stop all observatory motion.
 Network and power are expected to be uninterrupted.
 
 #. Verify that no systems went to fault, specifically the ATMCS and ATPneumatics. 
