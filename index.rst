@@ -46,8 +46,6 @@
 
 .. note::
 
-   **This technote is not yet published!**
-
    This document describes what should be checked in the event of a seismic event, specifically while in undergoing nighttime observations.
 
 .. Add content here.
@@ -130,17 +128,45 @@ If the network goes down OR the power is out
    The internal cold trap should prevent damage, but if the turbo pump can be connected within 4 hours it will greatly reduce the risk of damage.
 
 #. Check the vacuum of the dewar by looking at the number of lights illuminated on the ion pump. 
-   If a warm-up is occuring, then turn off the ion pump using the toggle switch found on the silver box connected to the LATISS frame.
+   Under normal circumstances the current will be at a minimum setting.
+   If a warm-up is occuring and the vaccumm pressure has increased, then more lights will be on.
+   If this is the case, turn off the ion pump using the toggle switch found on the silver box connected to the LATISS frame.
 
 #. If inclement weather is approaching or the area is safe but non-functional, the main dome shutter should be closed. 
 
-   * If the power is on, attempt to close the lower shutter, then the upper shutter, using the manual push buttons at the top of the stairs.
+   * If the power is on, attempt to close the lower shutter, then the upper shutter, using the :ref:`manual push buttons <fig_dome_control_box>` at the top of the stairs.
    * If the main power is off, there will be no power to the dome and the main shutter will need to be closed by hand.
      The lower shutter cannot be closed without a manual hydraulic pump.
-     To manually close the top shutter, there is a large metal pole with a hook on the end found on the dome floor or in the shipping container on calibration hill.
-     Attach the hook to the eye bolt near the motor shaft located at the very top of the dome.
+     To manually close the top shutter, there is a :ref:`large metal rod with a hook on the end found on the dome floor <fig_dome_rod_stored>` (or possibly in the shipping container on calibration hill).
+     Attach the hook to the eye bolt near the motor shaft located at the very top of the dome, as :ref:`seen in the figure <fig-dome-rod-installed>`.
      It will take ~5000 turns to close.
 
+
+.. _fig_dome_control_box:
+
+.. figure:: /_static/dome_control_box.jpg
+   :name: fig-dome-control-box
+   :width: 300px
+
+   The buttons to manually close the dome. 
+   These should only be used if the CSC is in standby (or unable to communicate).
+
+.. _fig_dome_rod_stored:
+
+.. figure:: /_static/manual_dome_closing_rod_stored.jpg
+   :name: fig-dome-rod-stored
+   :width: 800px
+
+   The rod to manually close the main dome shutter, stored on the first floor.
+
+.. _fig_dome_rod_installedd:
+
+.. figure:: /_static/manual_dome_closing_rod_installed.jpg
+   :name: fig-dome-rod-installed
+   :width: 800px
+
+   The rod to manually close the main dome shutter, attached to the main shutter eyebolt.
+   This must only be performed if there is no power to the dome motors.
 
 If the network stays up
 -----------------------
@@ -228,11 +254,11 @@ If the network stays up
 
 #. If inclement weather is approaching or the area is safe but non-functional, the main dome shutter should be closed. 
 
-   * If the main power is on, attempt to close the lower shutter, then the upper shutter, using the manual push buttons at the top of the stairs.
+   * If the power is on, attempt to close the lower shutter, then the upper shutter, using the :ref:`manual push buttons <fig_dome_control_box>` at the top of the stairs.
    * If the main power is off, there will be no power to the dome and the main shutter will need to be closed by hand.
      The lower shutter cannot be closed without a manual hydraulic pump.
-     To manually close the top shutter, there is a large metal pole with a hook on the end found on the dome floor or in the shipping container on calibration hill.
-     Attach the hook to the eye bolt near the motor shaft located at the very top of the dome.
+     To manually close the top shutter, there is a :ref:`large metal rod with a hook on the end found on the dome floor <fig_dome_rod_stored>` (or possibly in the shipping container on calibration hill).
+     Attach the hook to the eye bolt near the motor shaft located at the very top of the dome, as :ref:`seen in the figure <fig-dome-rod-installed>`.
      It will take ~5000 turns to close.
 
 
